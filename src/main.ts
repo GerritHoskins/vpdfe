@@ -1,7 +1,7 @@
 import { createApp } from 'vue'
 import App from './App.vue'
-import './style.css'       // ← Tailwind base styles
-import router from './router'
+import './assets/main.css'     
+import router from './router/index'
 //import { createPinia } from 'pinia'
 
 createApp(App)
