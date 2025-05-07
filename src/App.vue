@@ -25,7 +25,7 @@
     </div>
 
     <button
-      class="px-4 py-2 bg-indigo-600 text-gray-100 rounded-2xl hover:bg-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-400 transition"
+      class="px-4 py-2 mt-8 border border-emerald-300 border-solid rounded-lg bg-transparent text-gray-300"
       @click="toggleRealtime"
     >
       {{ realtime ? 'Pause' : 'Start' }} Live Updates
@@ -34,7 +34,7 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, onBeforeUnmount, ref } from 'vue';
+import { onMounted, ref } from 'vue';
 import { useVpdService } from './services/vpd';
 import StatCard from './components/StatCard.vue'
 
@@ -49,11 +49,6 @@ function toggleRealtime() {
 }
 
 onMounted(() => {
-  // initial snapshot
   fetchOnce();
-});
-
-onBeforeUnmount(() => {
-  // clean up if needed
 });
 </script>

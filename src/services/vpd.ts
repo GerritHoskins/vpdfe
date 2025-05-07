@@ -22,34 +22,41 @@ let socket: WebSocket | null = null;
 export function useVpdService() {
   function connect() {
     if (socket) return;
-
-    // Determine proper WS protocol based on page protocol
-    const protocol = window.location.protocol === 'https:' ? 'wss' : 'ws';
-    const host = window.location.hostname;    // e.g. "localhost"
-    const port = '8001';                      // or pull from import.meta.env.VITE_API_PORT
-    const url = `${protocol}://${host}:${port}/ws/vpd`;
-
+    const proto = window.location.protocol === 'https:' ? 'wss' : 'ws';
+    const host = window.location.host;
+    const url = `${proto}://${host}/ws/vpd`;
     socket = new WebSocket(url);
-
-    socket.onopen = () => {
-      console.info(`WebSocket connected to ${url}`);
-    };
-    socket.onmessage = event => {
-      const data: VpdData = JSON.parse(event.data);
-      vpd.value = data;
-    };
-    socket.onerror = err => {
-      console.error('WebSocket error:', err);
-    };
-    socket.onclose = () => {
-      console.warn('WebSocket closed');
-      socket = null;
-    };
+    socket.onopen   = () => console.info(`WS connected to ${url}`);
+    socket.onmessage= e => vpd.value = JSON.parse(e.data);
+    socket.onerror  = e => console.error('WebSocket error', e);
+    socket.onclose  = () => { console.warn('WebSocket closed'); socket = null; };
   }
 
   async function fetchOnce() {
-    const res = await fetch(`http://${window.location.hostname}:8001/vpd`);
-    vpd.value = await res.json();
+    try {
+      const res = await fetch('/api/vpd', {
+        headers: { 'Accept': 'application/json' },
+        credentials: 'include'
+      });
+
+      if (!res.ok) {
+        const text = await res.text();
+        console.error(`API returned HTTP ${res.status} — body:\n`, text);
+        throw new Error(`API Error ${res.status}`);
+      }
+
+      const ct = res.headers.get('content-type') || '';
+      if (!ct.includes('application/json')) {
+        const text = await res.text();
+        console.error('Expected JSON but got:', text);
+        throw new TypeError('Invalid content-type: ' + ct);
+      }
+
+      vpd.value = await res.json();
+
+    } catch (err) {
+      console.error('fetchOnce failed:', err);
+    }
   }
 
   return { vpd, connect, fetchOnce };

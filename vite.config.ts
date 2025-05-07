@@ -5,13 +5,18 @@ import tailwindcss from '@tailwindcss/vite'
 export default defineConfig({
   plugins: [vue(), tailwindcss()],
   server: {
-    host: true,        // shorthand for 0.0.0.0
-    port: 8070,        // (optional) ensure it stays at 5173
-    strictPort: true,  // (optional) fail if 5173 is in use
-    // If you need hot-reload to work on other devices:
+    host: '0.0.0.0',
+    port: 5173,       
+    strictPort: true, 
+    allowedHosts: [
+      'livevpd.pixeltronic.dev'
+    ],
     hmr: {
-     // host: '192.168.178.50',  // e.g. '192.168.1.42'
-     host: '77.22.17.208',  // e.g. '192.168.1.42'
+     // host: '192.168.178.50'
+     //host: '77.22.17.208',  // a71ae132-bd80-4423-940b-f88778061534
+     protocol: 'wss',
+     host: 'livevpd.pixeltronic.dev',
+     clientPort: 443 
     },
   },
 })
