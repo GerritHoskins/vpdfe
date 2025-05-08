@@ -1,4 +1,3 @@
-// frontend/src/services/vpd.ts
 import { ref } from 'vue';
 
 interface VpdData {
@@ -26,17 +25,20 @@ export function useVpdService() {
     const host = window.location.host;
     const url = `${proto}://${host}/ws/vpd`;
     socket = new WebSocket(url);
-    socket.onopen   = () => console.info(`WS connected to ${url}`);
-    socket.onmessage= e => vpd.value = JSON.parse(e.data);
-    socket.onerror  = e => console.error('WebSocket error', e);
-    socket.onclose  = () => { console.warn('WebSocket closed'); socket = null; };
+    socket.onopen = () => console.info(`WS connected to ${url}`);
+    socket.onmessage = (e) => (vpd.value = JSON.parse(e.data));
+    socket.onerror = (e) => console.error('WebSocket error', e);
+    socket.onclose = () => {
+      console.warn('WebSocket closed');
+      socket = null;
+    };
   }
 
   async function fetchOnce() {
     try {
       const res = await fetch('/api/vpd', {
-        headers: { 'Accept': 'application/json' },
-        credentials: 'include'
+        headers: { Accept: 'application/json' },
+        credentials: 'include',
       });
 
       if (!res.ok) {
@@ -53,7 +55,6 @@ export function useVpdService() {
       }
 
       vpd.value = await res.json();
-
     } catch (err) {
       console.error('fetchOnce failed:', err);
     }
