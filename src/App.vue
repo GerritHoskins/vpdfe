@@ -4,6 +4,9 @@
 
     <div class="flex flex-col justify-center items-center gap-4 mb-4">
       <div class="w-full bg-zinc-800 px-6 py-3 rounded-lg text-gray-300">
+        Air Temp (°C) <span class="font-medium text-emerald-300">{{ vpd.air_temp }}</span>
+      </div>
+      <div class="w-full bg-zinc-800 px-6 py-3 rounded-lg text-gray-300">
         Leaf Temp (°C) <span class="font-medium text-emerald-300">{{ vpd.leaf_temp }}</span>
       </div>
       <div class="w-full bg-zinc-800 px-6 py-3 rounded-lg text-gray-300">
@@ -11,9 +14,6 @@
       </div>
       <div class="w-full bg-zinc-800 px-6 py-3 rounded-lg text-gray-300">
         Air VPD (kPa) <span class="font-medium text-emerald-300">{{ vpd.air_vpd }}</span>
-      </div>
-      <div class="w-full bg-zinc-800 px-6 py-3 rounded-lg text-gray-300">
-        Air Temp (°C) <span class="font-medium text-emerald-300">{{ vpd.air_temp }}</span>
       </div>
 
       <!-- assuming StatCard accepts custom class -->
