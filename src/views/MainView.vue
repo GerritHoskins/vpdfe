@@ -10,6 +10,7 @@
       class="w-full bg-zinc-800 text-indigo-200"
       label="Leaf VPD (kPa)"
       :value="vpd.leaf_vpd"
+      :icon="stageIcon"
     />
   </div>
 
@@ -17,10 +18,23 @@
 </template>
 
 <script setup lang="ts">
+import { computed } from 'vue';
 import StageSelector from '../components/StageSelector.vue';
 import StatCard from '../components/StatCard.vue';
 import VpdStatItem from '../components/VpdStatItem.vue';
 import { useVpdService } from '../services/vpd';
+import { useVpdStages } from '../composables/useVpdStages';
 
 const { vpd } = useVpdService();
+const { selectedStage } = useVpdStages()
+
+const stageIcon = computed(() => {
+  switch (selectedStage.value.name) {
+    case 'Veg':            return '🌱'
+    case 'Early Flower':   return '🌿'
+    case 'Late Flower':    return '🌸'
+    case 'Danger Zone':    return '⚠️'
+    default:               return '❓'
+  }
+})
 </script>

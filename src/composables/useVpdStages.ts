@@ -18,27 +18,32 @@ export const MARGIN = 0.1;
 export const selectedStage = ref<Stage>(stages[1]);
 
 export function useVpdStages(value?: number) {
-  const optimalText = computed(() => {
-    const s = selectedStage.value;
-    return s.min == null ? 'Below 0.4 / Above 1.6' : `${s.min.toFixed(1)} – ${s.max!.toFixed(1)}`;
-  });
+  const isDanger = computed(() => selectedStage.value.min == null);
 
   const valueClass = computed<string>(() => {
     if (value == null) return '';
-    const v = value!;
+
+    const v = value;
     const s = selectedStage.value;
 
-    if (s.min == null) {
-      if (v < 0.4 || v > 1.6) return 'text-red-400';
-      if ((v >= 0.4 - MARGIN && v <= 0.4 + MARGIN) || (v >= 1.6 - MARGIN && v <= 1.6 + MARGIN))
-        return 'text-orange-400';
+    if (isDanger.value) {
+      const low = 0.4,
+        high = 1.6;
+      if (v < low - MARGIN || v > high + MARGIN) return 'text-red-400';
+      if (v < low || v > high) return 'text-orange-400';
       return 'text-lime-400';
     }
 
     const { min = 0, max = 0 } = s;
-    if (v >= min && v <= max) return 'text-lime-400';
-    if (v >= min - MARGIN && v <= max + MARGIN) return 'text-orange-400';
-    return 'text-red-400';
+
+    if (v < min - MARGIN || v > max + MARGIN) return 'text-red-400';
+    if (v < min || v > max) return 'text-orange-400';
+    return 'text-lime-400';
+  });
+
+  const optimalText = computed(() => {
+    const s = selectedStage.value;
+    return s.min == null ? 'Below 0.4 / Above 1.6' : `${s.min.toFixed(1)} – ${s.max!.toFixed(1)}`;
   });
 
   function selectStage(s: Stage) {
@@ -48,8 +53,8 @@ export function useVpdStages(value?: number) {
   return {
     stages,
     selectedStage,
-    optimalText,
     valueClass,
+    optimalText,
     selectStage,
   };
 }

@@ -1,17 +1,29 @@
 <template>
   <div class="bg-gray-900 shadow-md rounded-2xl p-8 flex flex-col items-center">
-    <span class="text-gray-300 mb-2">{{ selectedStage.name }}</span>
-    <span class="text-gray-400">Optimal kPa: {{ optimalText }}</span>
-    <span class="font-bold text-6xl my-4" :class="valueClass">
+
+    <div class="flex items-center gap-2 mb-2">
+      <span class="font-semibold text-gray-300">
+        {{ selectedStage.name }}
+      </span>
+      <span class="text-md">{{ icon }}</span>
+    </div>
+
+    <span class="text-sm text-gray-300">
+      Optimal kPa: {{ optimalText }}
+    </span>
+
+    <span class="font-bold text-8xl my-4" :class="valueClass">
       {{ value }}
     </span>
-    <span class="text-sm text-gray-400">Tolerance +- {{ MARGIN }} </span>
+
+    <span class="text-xs text-gray-300">Tolerance ± {{ MARGIN }}</span>
   </div>
 </template>
 
 <script setup lang="ts">
-import { useVpdStages, MARGIN } from '../composables/useVpdStages';
+import { useVpdStages, MARGIN } from '../composables/useVpdStages'
 
-const props = defineProps<{ value: number }>();
-const { selectedStage, optimalText, valueClass } = useVpdStages(props.value);
+const { value, icon } = defineProps<{ value: number; icon: string }>()
+
+const { selectedStage, optimalText, valueClass } = useVpdStages(value)
 </script>
