@@ -9,17 +9,13 @@
     "paths": {
       "@/*": ["src/*"]
     },
-    "types": ["vite/client"]    // includes Vite’s globals
+    "types": ["vite/client"] // includes Vite’s globals
   },
-  "include": [
-    "src/**/*.ts",
-    "src/**/*.d.ts",
-    "src/**/*.vue"
-  ],
+  "include": ["src/**/*.ts", "src/**/*.d.ts", "src/**/*.vue"],
   "exclude": ["node_modules"],
-  "files": [],
+  //"files": [],
   "references": [
-   // { "path": "./tsconfig.app.json" },
-   // { "path": "./tsconfig.node.json" }
+    // { "path": "./tsconfig.app.json" },
+    // { "path": "./tsconfig.node.json" }
   ]
 }
