@@ -1,4 +1,4 @@
-import { ref, computed } from 'vue';
+import { ref, computed, unref, Ref } from 'vue';
 
 export interface Stage {
   name: string;
@@ -17,13 +17,13 @@ export const MARGIN = 0.1;
 
 export const selectedStage = ref<Stage>(stages[1]);
 
-export function useVpdStages(value?: number) {
+export function useVpdStages(value?: number | Ref<number>) {
   const isDanger = computed(() => selectedStage.value.min == null);
 
   const valueClass = computed<string>(() => {
-    if (value == null) return '';
+    const v = unref(value)
+    if (v == null) return '';
 
-    const v = value;
     const s = selectedStage.value;
 
     if (isDanger.value) {
